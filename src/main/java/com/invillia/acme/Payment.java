@@ -1,10 +1,9 @@
 package com.invillia.acme;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.sql.Timestamp;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
+import java.sql.Date;
 
 @Entity
 public class Payment {
@@ -16,7 +15,11 @@ public class Payment {
 
     private String CreditCardNumber;
 
-    private Timestamp PaymentDate;
+    private Date PaymentDate;
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JsonIgnore
+    private Order order;
 
     public Integer getId() {
         return Id;
@@ -42,11 +45,19 @@ public class Payment {
         CreditCardNumber = creditCardNumber;
     }
 
-    public Timestamp getPaymentDate() {
+    public Date getPaymentDate() {
         return PaymentDate;
     }
 
-    public void setPaymentDate(Timestamp paymentDate) {
+    public void setPaymentDate(Date paymentDate) {
         PaymentDate = paymentDate;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
     }
 }

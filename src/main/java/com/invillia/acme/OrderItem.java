@@ -1,22 +1,23 @@
 package com.invillia.acme;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 import java.util.Currency;
 
 @Entity
-public class OderItem {
+public class OrderItem {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Integer Id;
-
     private String Description;
-
     private Currency UnitPrice;
-
     private Integer Quantity;
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JsonIgnore
+    private Order order;
+
 
     public Integer getId() {
         return Id;
@@ -48,5 +49,13 @@ public class OderItem {
 
     public void setQuantity(Integer quantity) {
         Quantity = quantity;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
     }
 }

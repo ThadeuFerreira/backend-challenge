@@ -1,22 +1,26 @@
 package com.invillia.acme;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.sql.Timestamp;
+import javax.persistence.*;
+import java.sql.Date;
+import java.util.List;
 
 @Entity
+@Table(name = "orders")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer Id;
-
     private String Address;
-
     private String Status;
 
-    private Timestamp ConfimationDate;
+    private Date ConfirmationDates;
+
+    @OneToMany(mappedBy = "order")
+    private List<OrderItem> orderItems;
+
+    @OneToMany(mappedBy = "order")
+    private List<Payment> payments;
+
 
     public Integer getId() {
         return Id;
@@ -42,11 +46,27 @@ public class Order {
         Status = status;
     }
 
-    public Timestamp getConfimationDate() {
-        return ConfimationDate;
+    public Date getConfirmationDates() {
+        return ConfirmationDates;
     }
 
-    public void setConfimationDate(Timestamp confimationDate) {
-        ConfimationDate = confimationDate;
+    public void setConfirmationDates(Date confirmationDates) {
+        ConfirmationDates = confirmationDates;
+    }
+
+    public List<OrderItem> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
+    }
+
+    public List<Payment> getPayments() {
+        return payments;
+    }
+
+    public void setPayments(List<Payment> payments) {
+        this.payments = payments;
     }
 }
