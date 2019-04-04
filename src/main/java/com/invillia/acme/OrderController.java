@@ -17,7 +17,10 @@ public class OrderController {
     private OrderItemRepository orderItemRepository;
 
     @GetMapping("/orders")
-    public List<Order> retrieveOrders(){ return orderRepository.findAll();}
+    public List<Order> retrieveOrders(){
+        List<Order> orders = orderRepository.findAll();
+        return orders;
+    }
 
     @PostMapping("/order")
     public ResponseEntity<Object> createOrder(@RequestBody Order order){
@@ -29,7 +32,7 @@ public class OrderController {
         return ResponseEntity.created(location).build();
     }
 
-    @PostMapping("/order/{id}/oderitem")
+    @PostMapping("/order/{id}/orderitem")
     public ResponseEntity<Object> addOrderItem(@RequestBody OrderItem orderItem, @PathVariable Integer id){
         Optional<Order> orderOptional = orderRepository.findById(id);
 
@@ -46,5 +49,51 @@ public class OrderController {
                 .buildAndExpand(savedOrderItem.getId())
                 .toUri();
         return ResponseEntity.created(location).build();
+    }
+
+    public class OrderOrderItem{
+        private Order order;
+        private List<OrderItem> orderItems;
+
+        public Order getOrder() {
+            return order;
+        }
+
+        public void setOrder(Order order) {
+            this.order = order;
+        }
+
+
+        public List<OrderItem> getOrderItems() {
+            return orderItems;
+        }
+
+        public void setOrderItems(List<OrderItem> orderItems) {
+            this.orderItems = orderItems;
+        }
+    }
+    @PostMapping("/orderwithitems")
+    public ResponseEntity<Object> addOrderWithItems(@RequestBody OrderOrderItem orderOrderItem){
+        Order order = orderOrderItem.getOrder();
+        List<OrderItem> orderItems = orderOrderItem.getOrderItems();
+
+        Order savedOrder = orderRepository.save(order);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(savedOrder.getId())
+                .toUri();
+
+        for(OrderItem oi : orderItems){
+            oi.setOrder(order);
+
+            OrderItem savedOrderItem = orderItemRepository.save(oi);
+            ServletUriComponentsBuilder.fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(savedOrderItem.getId())
+                    .toUri();
+        }
+
+        return ResponseEntity.created(location).build();
+
     }
 }

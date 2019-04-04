@@ -1,23 +1,34 @@
 package com.invillia.acme;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
-import java.util.Currency;
+import java.math.BigDecimal;
 
 @Entity
+@JsonIgnoreProperties()
 public class OrderItem {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer Id;
     private String Description;
-    private Currency UnitPrice;
+    private BigDecimal UnitPrice;
     private Integer Quantity;
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JsonIgnore
     private Order order;
 
+    public OrderItem() {
+    }
+
+    public OrderItem(String description, BigDecimal unitPrice, Integer quantity, Order order) {
+        Description = description;
+        UnitPrice = unitPrice;
+        Quantity = quantity;
+        this.order = order;
+    }
 
     public Integer getId() {
         return Id;
@@ -35,11 +46,11 @@ public class OrderItem {
         Description = description;
     }
 
-    public Currency getUnitPrice() {
+    public BigDecimal getUnitPrice() {
         return UnitPrice;
     }
 
-    public void setUnitPrice(Currency unitPrice) {
+    public void setUnitPrice(BigDecimal unitPrice) {
         UnitPrice = unitPrice;
     }
 
