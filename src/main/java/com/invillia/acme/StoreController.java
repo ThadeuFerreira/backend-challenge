@@ -55,8 +55,12 @@ public class StoreController {
             oldStore.setAddress(store.getAddress());
         }
 
-        storeRepository.save(oldStore);
-        return null;
+        Store savedStore = storeRepository.save(oldStore);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(savedStore.getId())
+                .toUri();
+        return ResponseEntity.created(location).build();
     }
 
 }
