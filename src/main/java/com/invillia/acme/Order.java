@@ -23,7 +23,6 @@ public class Order {
     @OneToMany(mappedBy = "order")
     private List<Payment> payments;
 
-
     public Integer getId() {
         return Id;
     }

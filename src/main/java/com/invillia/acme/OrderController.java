@@ -1,11 +1,13 @@
 package com.invillia.acme;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,6 +56,15 @@ public class OrderController {
     public class OrderOrderItem{
         private Order order;
         private List<OrderItem> orderItems;
+        public OrderOrderItem(){
+            orderItems = new ArrayList<>();
+            order = new Order();
+        }
+
+        public OrderOrderItem(Order order, List<OrderItem> orderItems) {
+            this.order = order;
+            this.orderItems = orderItems;
+        }
 
         public Order getOrder() {
             return order;

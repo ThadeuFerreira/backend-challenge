@@ -20,15 +20,6 @@ public class OrderItem {
     @JsonIgnore
     private Order order;
 
-    public OrderItem() {
-    }
-
-    public OrderItem(String description, BigDecimal unitPrice, Integer quantity, Order order) {
-        Description = description;
-        UnitPrice = unitPrice;
-        Quantity = quantity;
-        this.order = order;
-    }
 
     public Integer getId() {
         return Id;
